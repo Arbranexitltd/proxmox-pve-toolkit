@@ -246,7 +246,7 @@ Need custom infrastructure automation, bare-metal hypervisor hardening, or high-
 
 ---
 
-## 9. License
+## 9. License:
 
 Distributed under the **MIT License**. See `LICENSE` for details.  
 Copyright (c) 2026 Nikil & Algo2World. All rights reserved.
