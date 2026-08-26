@@ -1,0 +1,35 @@
+services:
+  # On-demand CLI interactive runner
+  pve-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: proxmox-pve-cli
+    env_file:
+      - .env
+    volumes:
+      - ./backups_reports:/app/reports
+    command: ["node", "health"]
+
+  # Scheduled Automated Health & Security Audit Daemon (Periodic Cron)
+  pve-auditor-scheduled:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: proxmox-pve-auditor
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./audit_logs:/app/audit_logs
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Starting Proxmox Periodic Auditor Loop (Interval: 1 hour)..."
+        while true; do
+          DATE_TAG=$$(date +%Y%m%d_%H%M%S)
+          echo "[$${DATE_TAG}] Executing cluster health & security audit..."
+          python main.py node health --json > /app/audit_logs/node_health_$${DATE_TAG}.json || true
+          python main.py security audit --export-script /app/audit_logs/fix_script_$${DATE_TAG}.sh || true
+          sleep 3600
+        done

@@ -1,0 +1,6 @@
+{
+  "name": "Proxmox PVE CLI Toolkit & Control Hub",
+  "description": "Production-ready Python CLI toolkit and interactive management hub for Proxmox VE 7.x/8.x hypervisors, featuring node health auditing, automated vzdump/snapshot orchestrator, bulk power operations, and security baseline hardening.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
